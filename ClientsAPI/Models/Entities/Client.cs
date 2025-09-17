@@ -4,6 +4,8 @@
     { //columnas que tendra la tabla
         public Guid Id { get; set; }             //genera solo
         public required string Name { get; set; }
+        public string Username { get; set; }  
+        public string Location { get; set; }
         public required string Email { get; set; }
         public required decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;       //sirve but buscar alternativas

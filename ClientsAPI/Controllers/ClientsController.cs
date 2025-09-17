@@ -45,7 +45,9 @@ namespace ClientsAPI.Controllers
                 Name = addClientDto.Name,
                 Email = addClientDto.Email,
                 Amount = addClientDto.Amount,
-                CreatedAt = addClientDto.CreatedAt
+                CreatedAt = addClientDto.CreatedAt,
+                Username = addClientDto.Username, 
+                Location = addClientDto.Location  
             };
 
             dbContext.Clients.Add(clientEntity);
@@ -88,4 +90,5 @@ namespace ClientsAPI.Controllers
         }
 
     }
+    
 }
