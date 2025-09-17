@@ -51,5 +51,61 @@ namespace ClientsAPI.Controllers
 
             return Ok(list);
         }
+
+        [HttpGet("by-country/{country}")]
+        public IActionResult GetByCountry(string country)
+        {
+            var clients = _service.GetAllClients()
+                .Where(c => c.Location == country)
+                .ToList();
+            return Ok(clients);
+        }
+
+        [HttpGet("max-amount")]
+        public IActionResult GetClientWithMaxAmount()
+        {
+            var client = _service.GetAllClients()
+                .OrderByDescending(c => c.Amount)
+                .FirstOrDefault();
+
+            return Ok(client);
+        }
+
+        [HttpGet("group-by-country")]
+        public IActionResult GroupByCountry([FromQuery] string country)
+        {
+            
+            var userInCountry = _service.GetAllClients()
+                .Where(c => c.Location == country)
+                .ToList();
+
+            if (!userInCountry.Any())
+            {
+                return NotFound($"No users found in {country}");
+            }
+
+            var result = new
+            {
+                Country = country,
+                Quantity = userInCountry.Count,
+                Users = userInCountry
+            };
+            return Ok(result);
+        }
+
+        [HttpGet("amount")]
+        public IActionResult GetByMinAmount([FromQuery] decimal minAmount)
+        {
+            var clients = _service.GetAllClients()
+                .Where(c => c.Amount > minAmount)
+                .ToList();
+
+            if (!clients.Any())
+            {
+                return NotFound($"No users were found witj purchases greater than {minAmount} ");
+            }
+
+            return Ok(clients);
+        }
     }
 }

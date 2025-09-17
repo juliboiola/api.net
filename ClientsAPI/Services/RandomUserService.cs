@@ -35,7 +35,7 @@ namespace ClientsAPI.Services
                 Email = user.Email,
                 Username = user.Login.Username,
                 Location = user.Location.Country,
-                Amount = new Random().Next(1000, 10000),
+                Amount = new Random().Next(1000, 30000),
                 CreatedAt = DateTime.UtcNow,
             };
         // guardar en db as client
