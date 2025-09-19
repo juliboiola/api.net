@@ -74,7 +74,7 @@ namespace ClientsAPI.Controllers
         [HttpGet("group-by-country")]
         public IActionResult GroupByCountry([FromQuery] string country)
         {
-            
+
             var userInCountry = _service.GetAllClients()
                 .Where(c => c.Location == country)
                 .ToList();
@@ -107,5 +107,19 @@ namespace ClientsAPI.Controllers
 
             return Ok(clients);
         }
+        [HttpGet("email")]
+        public IActionResult GetByEmail([FromQuery] string email)
+        {
+            var clientEmail = _service.GetAllClients()
+                .Where(c => c.Email == email)
+                .ToList();
+
+            if (!clientEmail.Any())
+            {
+               return NotFound($"No users were found with email {email} ");
+            }
+            return Ok(clientEmail);
+        }
+
     }
 }
