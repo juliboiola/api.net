@@ -1,6 +1,7 @@
 using ClientsAPI.Data;
 using ClientsAPI.Services; 
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +12,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Serilog Configuration
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/clientsapi-.log", rollingInterval: RollingInterval.Day)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Host.UseSerilog();
+
+//DbContext Configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("StringSQL")));
 
+//Dependency Injection Configuration
 builder.Services.AddHttpClient<RandomUserService>();
 builder.Services.AddScoped<RandomUserService>();
 builder.Services.AddControllers();
@@ -29,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ClientsAPI.Middlewares.RequestLogMiddleware>();
 
 app.UseAuthorization();
 
